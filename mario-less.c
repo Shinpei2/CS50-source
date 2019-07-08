@@ -1,12 +1,8 @@
 #include <cs50.h>
-
 #include <stdio.h>
-
-
 
 int main(void)
 {
-
     //値を入力
     int Height;
     do
@@ -14,7 +10,6 @@ int main(void)
         Height = get_int("Height: ");
     }
     while (Height < 1 || 8 < Height);
-
     
     //Heightと同じ段数の階段を表示
     for (int i = 1; i <= Height; i++)
@@ -34,5 +29,4 @@ int main(void)
         //改行
         printf("\n");
     }   
-
 }
