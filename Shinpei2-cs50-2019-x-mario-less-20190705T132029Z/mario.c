@@ -3,7 +3,7 @@
 
 int main(void)
 {
-    //値を入力
+    //入力した値をStoredに格納する
     int Height;
     do
     {
@@ -19,14 +19,15 @@ int main(void)
         {
             printf(" ");
         }
-
+        
         //ブロックを表示
         for (int j = 1; j <= i; j++)
         {
             printf("#");
         }
-
+        
         //改行
         printf("\n");
-    }   
+    }
+    
 }

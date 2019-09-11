@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+
+
+/*whole page*/
+#page{
+  margin:0px auto;
+}
+
+a{ color:#999966;}
+a:hover{color: #773300;}
+
+
+/***** page header *****/
+/* siteTitle & catchcopy */
+#pageHead #siteTitle{
+  font-size:30px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: bold;
+  line-height:1.2;
+  margin-bottom:0;
+}
+
+#pageHead #catchcopy{
+  font-size:12px;
+  line-height:1.5;
+  margin-top:5px;
+}
+
+/* glovalNavi */
+#pageHead .globalNavi{
+  border: solid #cccccc;
+  border-width: 1px 0;
+  padding:10px 0;
+  margin: 10px 0;
+}
+
+#pageHead .globalNavi ul{
+  margin: 0;
+  padding: 0;
+}
+
+#pageHead .globalNavi ul:after{
+  content:"";
+  clear:both;
+  display:block;
+}
+
+#pageHead .globalNavi ul li {
+  list-style:none;
+  width: 245px;
+  float: left;
+  border-left:solid 1px #cccccc;
+  padding:0 10px;
+  box-sizing: border-box;
+  text-align:center;
+  font-size:14px;
+  line-height:1.429;
+}
+
+#pageHead .globalNavi ul li:first-child{
+  border-left:none;
+}
+
+#pageHead .globalNavi ul li a{
+  color: inherit;
+  text-decoration: none;
+  display:block;
+  padding:5px 0;
+}
+
+#pageHead .globalNavi ul li a:hover,
+#pageHead .globalNavi ul li.current a{
+  background-color: #f2f2e5;
+}
+
+
+/***** page main *****/
+
+/**** pageBody****/
+#pageBody{
+  margin-top:30px;
+}
+#pageBody:after{
+  content:"";
+  clear:both;
+  display:block;
+}
+
+/*** pageBodysize ***/
+#pageBodyMain{
+  width:720px;
+  float:left;
+}
+#pageBodySub{
+  width:220px;
+  float:right;
+}
+
+/*** pageBodyMain***/
+#pageBodyMain p{
+  font-size:14px;
+  line-height:1.429;
+}
+
+/*main visual decoration in Home*/
+#pageBody .mainVisual{
+  position:relative;
+}
+
+#pageBody .mainVisual img{
+  vertical-align: bottom;
+}
+
+#pageBody .mainVisual .mainVisualText{
+  position: absolute;
+  left:50px;
+  bottom:350px;
+  color:#fff;
+  background-color:rgba(0,0,0,0.4);
+  width:400px;
+  padding:15px 25px;
+  -moz-box-sizing:border-box;
+  box-sizing:border-box;
+}
+
+#pageBody .mainVisual .mainVisualText h1{
+  font-size:26px;
+  line-height:1.231;
+  margin-botom:0;
+}
+
+#pageBody .mainVisual .mainVisualText p{
+  font-size:12px;
+  line-height:1.5;
+  margin-botom:0;
+}
+
+/*Portfolio Index*/
+#pageBody .portfolioIndex{
+  margin-top:40px;
+}
+
+#pageBody .portfolioIndex:after{
+  content:"";
+  clear:both;
+  display:block;
+}
+
+#pageBody .portfolioIndex article{
+  width:300px;
+  float:left;
+  margin-left:40px;
+}
+
+#pageBody .portfolioIndex article:first-child{
+  margin-left:0;
+}
+
+#pageBody .portfolioIndex article h2{
+  font-size:18px;
+  margin:5px 0;
+}
+
+#pageBody .portfolioIndex article p{
+  margin-top: 0;
+  font-size:12px;
+  line-height:1.5;
+}
+
+/*section heading*/
+#pageBodyMain .pageTitle{
+  font-size:26px;
+  background-color: #F2F2E5;
+  padding:5px 10px;
+  line-height: 1.231;
+  margin-top:0;
+}
+#pageBodyMain .heading-typeA{
+  font-size:18px;
+  color:#349FA6;
+  border-bottom: solid 1px #349FA6;
+  padding: 5px;
+  line-height: 1.333;
+}
+
+#pageBodyMain .heading-typeB{
+  font-size: 16px;
+  border-left: solid 5px #E3E4D9;
+  padding-left: 10px;
+  line-height: 1.375;
+}
+
+#pageBodyMain .heading-typeC{
+  font-size:14px;
+  line-height: 1.429;
+}
+/*** pageSubMain***/
+
+/* heading */
+#pageBodySub h2{
+  font-size:16px;
+  line-height:1.375;
+  padding:5px;
+  margin-top:0;
+  border-bottom: solid 1px #cccccc;
+}
+/* Information list */
+#pageBodySub .newsList ul {
+  list-style: none;
+  padding:0;
+}
+#pageBodySub .newsList ul li{
+  font-size:12px;
+  line-height:1.5;
+  margin:10px 5px;
+}
+#pageBodySub .newsList ul li time{
+  font-weight:bold;
+  display:block
+}
+
+/*-----go to top of page-----*/
+.pageTop{
+  font-size:12px;
+  text-align:right;
+  margin-top:30px;
+
+}
+
+
+
+/***** page footer *****/
+#pageFoot{
+    border-top: solid 1px #cccccc;
+    margin-top: 15px;
+    clear: both;
+}
+
+#pageFoot #copyright small{
+  font-size: 12px;
+  line-height: 1.429;
+}
+
+
+
+/***** general *****/
+.border-top{
+  border-top: solid 5px #777777;
+  margin-top: 15px;
+  padding-top:15px;
+}
+
+#submit{
+  padding: 0 25px;
+  color: white;
+  background-color: blue;
+  font-size: 14px;
+  font-weight: bold;
+
+}
