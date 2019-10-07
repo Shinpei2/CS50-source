@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>検索結果</h2><br>
+{% for item in results %}
+<li>{{ item }}</li>
+{% endfor %}
+<a href="/">検索画面へ戻る</a>
+{% endblock %}

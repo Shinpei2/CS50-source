@@ -1,0 +1,6 @@
+▼CS50－Week7
+Flaskを使う目的：簡単な記述でWebアプリケーションを開発するため
+
+▼不明単語
+tedius, 退屈な
+distill, 

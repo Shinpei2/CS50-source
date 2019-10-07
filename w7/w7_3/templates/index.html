@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+<form action="/register" method="POST">
+    <h3>Name</h3>
+    <input type="text" name="name" placeholder="Name">
+    <h3>Dorm</h3>
+    <select name="dorm">
+        <option value="" selected>Select</option>
+        <option value="Apley Court">Apley Court</option>
+        <option value="Canad">Canady</option>
+    </select>
+    <p>性別：
+        男<input type="radio" name="sex" value="男" checked>
+        女<input type="radio" name="sex" value="女">
+    </p>
+    <br>
+    <input type="submit" value="Register" method="POST">
+</form>
+<br>
+<a href="/registrants">登録者一覧の確認</a>
+{% endblock %}
