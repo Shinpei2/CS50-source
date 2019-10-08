@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+    <!-- http://getbootstrap.com/docs/4.1/content/typography/ -->
+    <h1 class="mb-3">Form</h1>
+
+    <!-- http://getbootstrap.com/docs/4.1/components/forms/ -->
+    <form action="/form" name="form1" method="post">
+
+        <div class="form-group" style="width:360px">
+            <label>Name</label>
+            <input type="text" name="name" class="form-control" placeholder="Name">
+        </div>
+
+        <div class="form-group" style="width:360px">
+            <label>Emp ID</label>
+            <input type="number" name="emp_id" class="form-control" min="1" max="99999" placeholder="Emp ID">
+        </div>
+
+        <div>
+            <label style="margin-top:5px;">SEX</label><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex" value="man" checked>
+                <label class="form-check-label">man</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex" value="woman" checked>
+                <label class="form-check-label">woman</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label style="margin-top:12px;">Hometown</label>
+            <select name="hometown" class="form-control" style="width:360px">
+                <option value="" style="color:grey;" selected>Hometown</option>
+                <option value="Hokkaido" >Hokkaido</option>
+                <option value="Tohoku" >Tohoku</option>
+                <option value="Kanto" >Kanto</option>
+                <option value="Hokuriku" >Hokuriku</option>
+                <option value="Tokai" >Tokai</option>
+                <option value="Kinki" >Kinki</option>
+                <option value="Shikoku" >Shikoku</option>
+                <option value="Chugoku" >Chugoku</option>
+                <option value="Kyusyu" >Kyusyu</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Department</label>
+            <select name="department" class="form-control" style="width:360px">
+                <option value="" style="color:grey;" selected>Department</option>
+                <option value="Sales" >Sales</option>
+                <option value="Engineering" >Engineering</option>
+                <option value="Legal" >Legal</option>
+                <option value="Finance" >Finance</option>
+                <option value="HR" >HR</option>
+            </select>
+        </div>
+        <br>
+        <!-- http://getbootstrap.com/docs/4.1/components/buttons/ -->
+        <button class="btn btn-primary" type="submit">Submit</button>
+
+    </form>
+
+
+    <script>
+    document.querySelector('form').onsubmit = function(){
+        if (!document.querySelector('input[name="name"]').value){
+            alert('Name is blank!');
+            return false;
+        } else if (!document.querySelector('input[name="emp_id"]').value){
+            alert('Emp ID is blank!');
+            return false;
+        }
+        else if (!document.querySelector('select[name="hometown"]').value){
+            alert('Select Hometown!');
+            return false;
+        } else if (!document.querySelector('select[name="department"]').value){
+            alert('Select Department!');
+            return false;
+        }
+        return true;
+    };
+    </script>
+
+
+
+
+{% endblock %}
