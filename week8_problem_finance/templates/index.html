@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+
+    <h1>{{ message }}</h1>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Symbol</th>
+                <th scope="col">Company Name</th>
+                <th scope="col">Shares</th>
+                <th scope="col">Price</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in users_info_list %}
+            <tr>
+                <th scope="row">{{ item["symbol"] }}</th>
+                <td>{{ item["name"] }}</td>
+                <td>{{ item["shares"] }}</td>
+                <td>{{ item["price"] }}</td>
+                <td>{{ item["total"] }}</td>
+            </tr>
+            {% endfor %}
+            <tr style="background-color:silver">
+                <th scope="row">CASH</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ cash }}</td>
+            </tr>
+            <tr>
+                <th scope="row">STOCK + CASH</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ cash_stock_total }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

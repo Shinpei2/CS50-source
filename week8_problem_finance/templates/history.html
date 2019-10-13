@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+
+
+Symbol	Shares	Price	Transacted
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Symbol</th>
+                <th scope="col">Shares</th>
+                <th scope="col">Price</th>
+                <th scope="col">Transacted</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in hist_data %}
+            <tr>
+                <th scope="row">{{ item["symbol"] }}</th>
+                <td>{{ item["shares"] }}</td>
+                <td>{{ item["price"] }}</td>
+                <td>{{ item["tr_datetime"] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

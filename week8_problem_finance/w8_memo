@@ -1,0 +1,163 @@
+﻿◎メモ
+▼単語
+noteworthy		注目に値する
+conventional		従来の
+dorm		寮
+aesthetic		美的
+devolve		委譲する
+stock quote		株価
+
+export API_KEY=''
+
+▼今週の課題：MVCモデルを用いた「ウェブベースの株式購入アプリ」
+
+SQLite3まとめ - Qiita
+https://qiita.com/ChiakiYamaoka/items/b7c7863688d6f23c0501
+
+
+◎Problem8－各ファイルの説明
+▼application.py
+①　@login_requiredの関数群
+　・現状：apology()を返してるだけ　※未完成
+　・ゴール：ログインにリダイレクト
+　・各関数のMethodにも注意
+
+▼herpers.py
+①apology()
+　・最終的に、apology.htmlを返す　※renderの方法に注意
+　・この関数の中で、特殊文字の置換の為のescape()関数を定義している
+　　※escape()を内部で定義する理由は、aplogy()でしか使わないため
+　・
+②login_required()　：「ログイン必要ですよ」。
+
+③lookup(symbol)　
+　・引数のsymbol：NFLXなど
+　・戻り値：株の引用(stock quote)　※以下の3つのキーを持つ辞書型
+　　　name(str型):会社の名前
+　　　price(float型)：株価
+　　　symbole(str型)：株式シンボルの大文字バージョン
+
+④usd(value)　：「数値→ドル形式」に整形
+
+▼requirements.txt　：このアプリの要件
+
+▼static/　：style.css　→好きなの使おう
+
+▼templates/
+①login.html　：HTMLフォーム / Bootstrapでスタイル化
+
+②apology.html
+　・herpers.pyのapology()で呼び出し
+　　※apology()は、以下の2つを引数として取る
+　　　message　: bottomの値として　→エラー文
+　　　code　　：topの値として　　　→HTTP-Responce
+
+③layout.html
+　・??? Flaskのflash message support
+
+◎Problem8－各機能
+▼register：ユーザー登録機能(フォームに情報を入力し、DBへ登録)
+　①登録フォーム（POSTで送信）
+　　・ユーザネーム(text field)：name="username" / ブランクor登録済み→apology()
+　　・パスワード(text field)：name="password"
+　　・パスワード2回目(text field)：name="confirmation" / ブランクorパスワード不一致→apology()
+　②DBへの登録（usersテーブルへINSERT）
+　　・パスワードはそのままではなく、ハッシュ値で保存
+　　・ハッシュ値の生成はgenerate_password_hash()を用いる
+　③register.htmlを新規作成する
+
+▼quote：株価表示機能(ある株の現在の株価を提示)
+　・ '/quote'：GET, POSTの2パターンの処理
+　　①GET
+　　・新テンプレート(1)：quote.html(for 'GET')
+　　　※symbol入力フォーム(text field)：name="symbol" / submit
+　　②POST
+　　　・新テンプレート(2)：quoted.html(for 'POST')
+　　　・テンプレート内に、lookup()から得た値を埋め込む
+
+▼buy：株購入機能
+　①フォーム（POSTで送信）
+　　(1)株式symbol(text field)：name='symbol' / blank or symbol存在しない→apology()
+　　(2)株式数(text field)：name='shares' / 正の整数以外→apology()
+　②新規テーブルのcreate(1つまたは複数)：購入履歴を追跡するため
+　　・追跡条件：誰が / 何を / どの値段で / いつ　
+　　・UNIQUEなindexを定義
+　　・上記とは別に、検索用のindexを定義する(non-UNIQUE)
+　③備考
+　　・株式の現在価格→lookup()を呼び出し
+　　・ユーザのcash（$）→SELECT文 from usersテーブル
+　　・ユーザのcash($)で株式が購入できない場合→apology()
+　　・transactionの競合は未考慮でOK
+
+▼index：ユーザ情報テーブル表示機能（ユーザーのログイン中の間）
+　・テーブルの内容：ユーザー所有株式 /株式毎の所有数 / 現在株価 / 株式時価総額の合計 / cash($) / 総計(時価総額合計＋cash)
+)
+　　※symbol, name, shares, price, total→application.py内で辞書のリストを作成して、テンプレートに渡す
+　・複数のSELECT文　※WHERE句内：group by / having / sumなど
+　・株価情報→lookup()の呼び出し
+
+▼sell：株式売却機能
+　①フォーム( submit時　→ '/sell' へPOST)
+　　・セレクトメニュー：name="symbol" / 未選択 or 株式未所有時→apology()
+　　・株式数(text field)：name="shares" / 正の整数以外 or 所有株式数より多い数値　→apology()
+　　・競合は考慮しなくてOK
+
+▼history：ユーザの取引ログ表示機能
+　・リスト形式：購入、売却毎に1行
+　・1行：株式symbol / (購入時・売却時の)時価単価 / 取引株式数 / 取引日時
+　・購入用テーブルの変更 or 追加のテーブルをCREATE　※冗長性を小さくするように
+
+▼check：ユーザ名チェック機能　→json形式でなく、Py形式で！
+　・ユーザ名の条件：DBへ登録済みでない名前
+　　※1文字以上チェック　→register側でalertつける
+　・ユーザ名チェックは、jsonify()呼び出し
+　　→OKなら、JSON形式でtrue, NGなら、JSON形式でfalseを返す???
+　・ユーザチェックのalert()機能を、JS内でーBootstrapのalert
+　　※詳細は、Prob8のspecificationの最後
+
+▼オリジナル機能：最低1個、以下のいずれかの機能を実装
+　・パスワード変更機能
+　・新たにキャッシュの追加出来る機能
+　・index内で、既に所有済みの株式を選択して追加購入・売却できる機能
+　・登録のパスワード入力の際に、複数文字種(文字＋数字＋記号など)を要求
+　・その他の特徴
+
+▼ファイル
+①モデル（TABLE）
+　・users（ユーザ情報）
+　　→
+　・
+
+テンプレート一覧
+　◎layout.html　※デフォで実装済
+　◎login.html
+　◎apology.html　※デフォ
+　◎index.html
+　◎register.html
+　◎quote.html(for 'GET' by '/quote')
+　◎quoted.html(for 'POST' by '/quote')
+　◎buy.html(for 'GET' by '/buy')
+　◎buyed.html(for 'POST' by '/buy')
+　・sell.html(for 'GET' by '/sell')
+　・sold.html(for 'POST' by '/sell')
+　・history.html
+
+Finance機能一覧
+◎login・logout機能　※実装済
+◎register：ユーザ登録機能
+◎check：ユーザ名チェック機能
+◎quote：株価表示機能
+◎buy：株購入機能
+◎index：ユーザ情報表示機能
+◎sell：株式売却機能
+◎history：ユーザ取引ログ表示機能
+▼オリジナル
+　
+
+▼手順
+①全ページとコントローラの相関図
+　※必要な情報を随時、相関図に書き込んでいく
+②各機能ごとに実装
+　※必要な場面で、テーブル定義書とE-R図の作成
+
+

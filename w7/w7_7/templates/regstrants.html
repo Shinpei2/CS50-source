@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>Registered Member</h2>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Dorm</th>
+        <th>Sex</th>
+    </tr>
+    {% for item in students %}
+    <tr>
+        <td>{{ item["name"] }}</td>
+        <td>{{ item["dorm"] }}</td>
+        <td>{{ item["sex"] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<br>
+<!-- 辞書型のまま表示 -->
+<h2>Registered Member(成形なし)</h2>
+{% for item in students %}
+{{ item }}
+<br>
+{% endfor %}
+<br>
+<a href="/">トップ画面へ戻る</a>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote
+{% endblock %}
+
+{% block main %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Price-ID</th>
+                <th scope="col">Symbol</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">{{ stock_data["name"] }}</th>
+                <td>{{ stock_data["price"] }}</td>
+                <td>{{ stock_data["symbol"] }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
