@@ -22,7 +22,7 @@ Symbol	Shares	Price	Transacted
             {% for item in hist_data %}
             <tr>
                 <th scope="row">{{ item["symbol"] }}</th>
-                <td>{{ item["shares"] }}</td>
+                <td>{{ item["tr_shares"] }}</td>
                 <td>{{ item["price"] }}</td>
                 <td>{{ item["tr_datetime"] }}</td>
             </tr>

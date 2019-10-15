@@ -48,10 +48,9 @@ def index():
     # username = db.execute("SELECT username FROM users WHERE user_id= :user_id", user_id=session["user_id"])
     cash = db.execute("SELECT cash FROM users WHERE user_id=:user_id", user_id=session["user_id"])
     cash = cash[0]["cash"]
-    user_stocks = db.execute("SELECT * FROM user_stock WHERE user_id=:user_id", user_id=session["user_id"])
+    user_stocks = db.execute("SELECT * FROM user_stock WHERE user_id=:user_id and shares > 0", user_id=session["user_id"])
 
     # create the list which is composed of user's information records
-
     users_info_list = []
     cash_stock_total = cash
     for item in user_stocks:
@@ -59,8 +58,11 @@ def index():
         total = item["shares"] * stock_data["price"]
         cash_stock_total += total
         user_tr = {"symbol": item["symbol"], "name": stock_data["name"],
-                   "shares": item["shares"], "price": stock_data["price"], "total": total}
+                   "shares": item["shares"], "price": usd(stock_data["price"]), "total": usd(total)}
         users_info_list.append(user_tr)
+
+    cash_stock_total = usd(cash_stock_total)
+    cash = usd(cash)
     return render_template("index.html", users_info_list=users_info_list, cash=cash, cash_stock_total=cash_stock_total)
 
 
@@ -86,12 +88,22 @@ def buy():
         if balance < 0:
             return apology("your cash is less than pay-cash !")
 
-        # if all valid check is ok, update users-table and insert record to transactions-table and user_stock-table
+        # if all valid check is ok, insert record to transactions-table and user_stock-table
         db.execute("UPDATE users SET cash= :cash WHERE user_id=:user_id", cash=balance, user_id=session["user_id"])
-        db.execute("INSERT INTO transactions(user_id, symbol, price, shares) values(:user_id, :symbol, :price, :shares)",
+        db.execute("INSERT INTO transactions(user_id, symbol, price, tr_shares) values(:user_id, :symbol, :price, :shares)",
                    user_id=session["user_id"], symbol=stock_data["symbol"], price=stock_data["price"], shares=shares)
-        db.execute("INSERT INTO user_stock(user_id, symbol, shares) values(:user_id, :symbol, :shares)",
-                   user_id=session["user_id"], symbol=stock_data["symbol"], shares=shares)
+
+        # insert user_stock or update user_stock
+        own_shares = db.execute("SELECT shares FROM user_stock where user_id= :user_id and symbol= :symbol",
+                                user_id=session["user_id"], symbol=stock_data["symbol"])
+
+        if len(own_shares) == 0:
+            db.execute("INSERT INTO user_stock(user_id, symbol, shares) values(:user_id, :symbol, :shares)",
+                       user_id=session["user_id"], symbol=stock_data["symbol"], shares=shares)
+        else:
+            total_shares = own_shares[0]["shares"] + shares
+            db.execute("UPDATE user_stock SET shares= :shares WHERE user_id=:user_id and symbol= :symbol",
+                       shares=total_shares, user_id=session["user_id"], symbol=symbol)
 
         return redirect("/")
 
@@ -115,6 +127,8 @@ def check():
 def history():
     """Show history of transactions"""
     hist_data = db.execute("SELECT * FROM transactions WHERE user_id=:user_id", user_id=session["user_id"])
+    for item in hist_data:
+        item["price"] = usd(item["price"])
     return render_template("history.html", hist_data=hist_data)
 
 
@@ -225,34 +239,33 @@ def sell():
         user_stocks = db.execute("SELECT * FROM user_stock WHERE user_id=:user_id", user_id=session["user_id"])
         return render_template("sell.html", user_stocks=user_stocks)
     elif request.method == "POST":
+        # get symbol and shares from template
         symbol = request.form.get("symbol")
         shares = int(request.form.get("shares"))
+
+        # calculate left_shares after buying stocks.
         own_shares = db.execute("SELECT shares FROM user_stock WHERE user_id=:user_id and symbol=:symbol",
                                 user_id=session["user_id"], symbol=symbol)
         own_shares = own_shares[0]["shares"]
         left_shares = own_shares - shares
+
+        # if left_shares is less than 1, return apology().
         if left_shares < 0:
             return apology(f"submitted shares are more than {symbol} shares you own!", 400)
-
-        stock_data = lookup(symbol)
-        user_cash = db.execute("SELECT cash FROM users WHERE user_id=:user_id", user_id=session["user_id"])
-        get_cash = stock_data["price"] * shares
-        balance = user_cash[0]["cash"] + get_cash
-
-        # update databases
-        db.execute("UPDATE users SET cash= :cash WHERE user_id=:user_id", cash=balance, user_id=session["user_id"])
-        db.execute("INSERT INTO transactions(user_id, symbol, price, shares) values(:user_id, :symbol, :price, :shares)",
-                   user_id=session["user_id"], symbol=symbol, price=stock_data["price"], shares=(-1) * shares)
-
-        # if left_shares is 0, delete symbol record from user_stock-table
-        if left_shares == 0:
-            db.execute("DELETE FROM user_stock where user_id=:user_id and symbol=:symbol",
-                       user_id=session["user_id"], symbol=symbol)
         else:
+            stock_data = lookup(symbol)
+            user_cash = db.execute("SELECT cash FROM users WHERE user_id=:user_id", user_id=session["user_id"])
+            get_cash = stock_data["price"] * shares
+            balance = user_cash[0]["cash"] + get_cash
+
+            # update all databases
+            db.execute("UPDATE users SET cash= :cash WHERE user_id=:user_id", cash=balance, user_id=session["user_id"])
+            db.execute("INSERT INTO transactions(user_id, symbol, price, tr_shares) values(:user_id, :symbol, :price, :shares)",
+                       user_id=session["user_id"], symbol=symbol, price=stock_data["price"], shares=(-1) * shares)
             db.execute("UPDATE user_stock SET shares=:left_shares WHERE user_id=:user_id and symbol=:symbol",
                        left_shares=left_shares, user_id=session["user_id"], symbol=symbol)
 
-        return redirect("/")
+            return redirect("/")
 
 
 @app.route("/add_cash", methods=["GET", "POST"])
